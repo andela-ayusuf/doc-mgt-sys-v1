@@ -1,0 +1,25 @@
+{
+  "name": "document-management-system-v1",
+  "version": "1.0.0",
+  "description": "A DMS to manage documents, users and user roles developed using Sequelize.js, an ORM for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine-node --captureExceptions documentManagerSpec.js --forceexit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andela-ayusuf/document-management-system-v1.git"
+  },
+  "author": "Abdulmalik Yusuf",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andela-ayusuf/document-management-system-v1/issues"
+  },
+  "homepage": "https://github.com/andela-ayusuf/document-management-system-v1",
+  "dependencies": {
+    "jasmine-node": "^1.14.5",
+    "pg": "^4.4.2",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.12.0"
+  }
+}
