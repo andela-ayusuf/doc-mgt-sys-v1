@@ -4,14 +4,12 @@ var User = require('./schema').User;
 var Role = require('./schema').Role;
 var Document = require('./schema').Document;
 
-sequelize.sync().then(function() {
-  return [User, Document, Role];
-});
-
+// syncs models with the database
 User.sequelize.sync().then();
 Role.sequelize.sync().then();
 Document.sequelize.sync().then();
 
+// this method creates a new user
 exports.createUser = function(first, last, position) {
   return Role.findOrCreate({where: {title: position}})
   .then(function(role) {
@@ -28,24 +26,28 @@ exports.createUser = function(first, last, position) {
   });
 };
 
+// this method returns all users
 exports.getAllUsers = function() {
   return User.findAll().then(function(users) {
     return users;
   });
 };
 
+// this method creates a new role
 exports.createRole = function(title) {
   return Role.create({title: title}).then(function(role) {
     return role;
   });
 };
 
+// this method return all roles
 exports.getAllRoles = function() {
   return Role.findAll().then(function(roles) {
     return roles;
   });
 };
 
+// this function return the date, used by createDocument()
 currentDay = function() {
   var today = new Date();
   var dd = today.getDate();
@@ -54,6 +56,7 @@ currentDay = function() {
   return dd+'-'+mm+'-'+yyyy;
 };
 
+// this method creates a new document
 exports.createDocument = function(title, position) {
   return Role.findOrCreate({where: {title: position}}).then(function(role) {
     return role;
@@ -69,6 +72,7 @@ exports.createDocument = function(title, position) {
   });
 };
 
+// this method returns all docuemnts
 exports.getAllDocuments = function(limit) {
   return Document.findAll({
     order: '"createdAt" DESC',
@@ -79,6 +83,7 @@ exports.getAllDocuments = function(limit) {
   });
 };
 
+// this method returns all document accessible to a role according to the date of creation
 exports.getAllDocumentsByRole = function(role, limit) {
   return Document.findAll({
     where: {accessibleTo: role},
@@ -90,6 +95,7 @@ exports.getAllDocumentsByRole = function(role, limit) {
   });
 };
 
+// this method returns documents created on a particular day
 exports.getAllDocumentsByDate = function(date, limit) {
   return Document.findAll({
     where: {createdOn: date},
