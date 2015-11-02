@@ -10,6 +10,7 @@ Role.sequelize.sync().then();
 Document.sequelize.sync().then();
 
 // this method creates a new user
+// NB: the 'position' parameter is the user role
 exports.createUser = function(first, last, position) {
   return Role.findOrCreate({where: {title: position}})
   .then(function(role) {
@@ -20,8 +21,13 @@ exports.createUser = function(first, last, position) {
       lastname: last,
       role: position
     })
-    .then(function(user) {
-      return user;
+    .then(function(user, err) {
+      if (user) {
+        return user;
+      }
+      else {
+        throw err;
+      }      
     });
   });
 };
@@ -57,6 +63,7 @@ currentDay = function() {
 };
 
 // this method creates a new document
+// NB: the 'position' parameter is the user role
 exports.createDocument = function(title, position) {
   return Role.findOrCreate({where: {title: position}}).then(function(role) {
     return role;
