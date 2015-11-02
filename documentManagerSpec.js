@@ -25,10 +25,16 @@ describe('User', function() {
   });
 
   it('should validate that a new user created is unique.', function(done) {
-    User.findAll({where: {firstname: 'Kanye'}}).then(function(user, err) {
-      expect(user.length).toBe(1);
-      done();
+    User.create({
+      firstname: 'Kanye',
+      lastname: 'West',
+      role: 'Rapper'
+    }).catch(function(err) {
+      expect(err).toBeDefined();
+      expect(err.hasOwnProperty('errors')).toEqual(true);
+      expect(err.errors[0].type).toEqual('unique violation');
     });
+    done(); 
   });
 
   it('should validate that a new user created has a role defined.', function(done) {
@@ -147,8 +153,12 @@ describe('Search', function() {
       Role.destroy({where: {}}).then(function() {
         dmsCtrl.createDocument('Barney and friends', 'Kids').then(function() {
           dmsCtrl.createDocument('Snow white', 'Kids').then(function() {
-            dmsCtrl.createDocument('Twilight', 'Adolescents').then(function() {
-              done();
+            dmsCtrl.createDocument('Family Guy', 'Kids').then(function() {
+              dmsCtrl.createDocument('Boondocks', 'Kids').then(function() {
+                dmsCtrl.createDocument('Twilight', 'Adolescents').then(function() {
+                  done();
+                });
+              });
             });
           });
         });
@@ -165,8 +175,8 @@ describe('Search', function() {
   });
 
   it('should validate that all documents, limited by a specified number and ordered by published date, that can be accessed by a specified role, are returned when getAllDocumentsByRole is called.', function(done) {
-    dmsCtrl.getAllDocumentsByRole('Kids', 2).then(function(docs) {
-      expect(docs.length).toEqual(2);
+    dmsCtrl.getAllDocumentsByRole('Kids', 3).then(function(docs) {
+      expect(docs.length).toEqual(3);
       done();
     });
   });
